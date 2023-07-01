@@ -1,6 +1,12 @@
 'use client';
 
-import { Dispatch, SetStateAction, useRef, useEffect } from 'react';
+import {
+	Dispatch,
+	SetStateAction,
+	useRef,
+	useEffect,
+	useCallback,
+} from 'react';
 import OBSWebSocket from 'obs-websocket-js';
 
 /**
@@ -30,6 +36,8 @@ type setState<T> = Dispatch<SetStateAction<T | undefined>>;
 
 /** OBSLocalControllerProps configures a OBSLocalController. */
 export interface OBSLocalControllerProps {
+	/** Enable debug logging to the console. */
+	debug?: boolean;
 	/** The address of the OBS WebSocket server.
 	 * If not set, default to 'localhost'. */
 	address?: string;
@@ -52,6 +60,7 @@ export default function OBSLocalController(props: OBSLocalControllerProps) {
 	/** Reference to the initialized OBS connection. */
 	const obs = useRef<OBSWebSocket | null>(null);
 	const {
+		debug,
 		address,
 		port,
 		password,
@@ -60,6 +69,16 @@ export default function OBSLocalController(props: OBSLocalControllerProps) {
 		transition,
 		setTransition,
 	} = props;
+
+	/** debugLog logs messages only if props.debug is set. */
+	const debugLog = useCallback(
+		(msg: string) => {
+			if (debug) {
+				console.log('OBSLocalController: ' + msg);
+			}
+		},
+		[debug]
+	);
 
 	/* Start a connection to OBS's WebSocket server.
 	 * On success, a callback is configured to reconnect on any error. */
@@ -76,9 +95,11 @@ export default function OBSLocalController(props: OBSLocalControllerProps) {
 			 * or the component is unmounted. */
 			while (running) {
 				try {
+					debugLog(`trying to connect to '${url}'...`);
 					await _obs.connect(url, password);
 					break;
 				} catch (e: any) {
+					debugLog(`connection failed: ${e}`);
 					await _obs.disconnect();
 				}
 
@@ -87,15 +108,18 @@ export default function OBSLocalController(props: OBSLocalControllerProps) {
 			_obs.once('ConnectionClosed', (e: any) => setTimeout(connect, 500));
 
 			if (!running) {
+				debugLog('component was unmounted after connection!');
 				_obs.disconnect();
 				return;
 			}
 
+			debugLog('connected!');
 			obs.current = _obs;
 		}
 
 		connect();
 		return () => {
+			debugLog('disconnecting...');
 			running = false;
 
 			obs.current?.disconnect();
@@ -120,6 +144,7 @@ export default function OBSLocalController(props: OBSLocalControllerProps) {
 					return;
 				}
 
+				debugLog('waiting OBS connection before changing the preview scene...');
 				await sleep(250);
 			}
 
@@ -196,6 +221,7 @@ export default function OBSLocalController(props: OBSLocalControllerProps) {
 					return;
 				}
 
+				debugLog('waiting OBS connection before changing scenes...');
 				await sleep(250);
 			}
 
@@ -216,8 +242,10 @@ export default function OBSLocalController(props: OBSLocalControllerProps) {
 				const { currentProgramSceneName: changedScene } =
 					await obs.current?.call('GetCurrentProgramScene');
 				if (changedScene != value.scene) {
+					debugLog('failed to change the scene, retrying...');
 					retries--;
 				} else {
+					debugLog('scene changed successfully!');
 					break;
 				}
 			}
