@@ -126,6 +126,10 @@ export default function OBSLocalController(props: OBSLocalControllerProps) {
 			/* Update the preview scene and reset the state variable. */
 			await obs.current?.callBatch([
 				{
+					requestType: 'SetStudioModeEnabled',
+					requestData: { studioModeEnabled: true },
+				},
+				{
 					requestType: 'SetCurrentPreviewScene',
 					requestData: { sceneName: value },
 				},
@@ -158,6 +162,10 @@ export default function OBSLocalController(props: OBSLocalControllerProps) {
 		/** sceneTransition actually attempts the scene transaction. */
 		async function sceneTransition() {
 			return obs.current?.callBatch([
+				{
+					requestType: 'SetStudioModeEnabled',
+					requestData: { studioModeEnabled: true },
+				},
 				{
 					requestType: 'SetCurrentPreviewScene',
 					requestData: { sceneName: value.scene },
