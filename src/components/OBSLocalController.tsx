@@ -137,6 +137,20 @@ export default function OBSLocalController(props: OBSLocalControllerProps) {
 		}
 		const value: string = previewScene;
 
+		/** setPreview actually attempts to set the preview scene. */
+		async function setPreview() {
+			await obs.current?.callBatch([
+				{
+					requestType: 'SetStudioModeEnabled',
+					requestData: { studioModeEnabled: true },
+				},
+				{
+					requestType: 'SetCurrentPreviewScene',
+					requestData: { sceneName: value },
+				},
+			]);
+		}
+
 		async function setScene() {
 			/* Wait until the connection is established. */
 			while (!obs.current) {
@@ -148,17 +162,27 @@ export default function OBSLocalController(props: OBSLocalControllerProps) {
 				await sleep(250);
 			}
 
-			/* Update the preview scene and reset the state variable. */
-			await obs.current?.callBatch([
-				{
-					requestType: 'SetStudioModeEnabled',
-					requestData: { studioModeEnabled: true },
-				},
-				{
-					requestType: 'SetCurrentPreviewScene',
-					requestData: { sceneName: value },
-				},
-			]);
+			/* Try to change the scene, checking if the scene did actually change. */
+			let retries = 5;
+			while (retries > 0) {
+				await setPreview();
+
+				await sleep(250);
+				const { currentPreviewSceneName: changedScene } =
+					await obs.current?.call('GetCurrentPreviewScene');
+				if (changedScene != value) {
+					debugLog('failed to set the preview scene, retrying...');
+					retries--;
+				} else {
+					debugLog('preview scene set successfully!');
+					break;
+				}
+			}
+			if (retries <= 0) {
+				throw 'failed to set the preview scene';
+			}
+
+			/* Finally, reset the state variable. */
 			setPreviewScene(undefined);
 		}
 
