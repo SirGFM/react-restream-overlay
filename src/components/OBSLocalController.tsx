@@ -125,7 +125,7 @@ export default function OBSLocalController(props: OBSLocalControllerProps) {
 			obs.current?.disconnect();
 			obs.current = null;
 		};
-	}, [address, port, password]);
+	}, [address, port, password, debugLog]);
 
 	/* Change the preview scene, when requested. */
 	useEffect(() => {
@@ -190,7 +190,7 @@ export default function OBSLocalController(props: OBSLocalControllerProps) {
 		return () => {
 			running = false;
 		};
-	}, [previewScene, setPreviewScene]);
+	}, [previewScene, setPreviewScene, debugLog]);
 
 	useEffect(() => {
 		let running = true;
