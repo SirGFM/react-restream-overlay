@@ -1,0 +1,82 @@
+html,
+body {
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+}
+
+@font-face {
+	/** m5x7 by Daniel Linssen. Get it from https://managore.itch.io/m5x7. */
+	font-family: 'm5x7';
+	src: url(./font/m5x7.ttf) format('truetype');
+}
+
+body {
+	background-image: url('./img/bg.png');
+	/*
+	background-color: #222034;
+	color: #cbdbfc;
+	font-size: 1em;
+	*/
+}
+
+div#game {
+	background: #000000;
+	outline-style: dotted;
+	outline-width: 2px;
+}
+
+.bg-block {
+	border-bottom-color: #cbdbfc;
+	border-left-color: #cbdbfc;
+	border-right-color: #ffffff;
+	border-top-color: #ffffff;
+	border-style: solid;
+	border-width: 2px;
+}
+
+.block-outter {
+	background: #5b6ee1;
+}
+
+.block-inner {
+	background: #3f3f74;
+}
+
+.center {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	place-content: space-evenly;
+}
+
+.m5x7 {
+	font-family: 'm5x7';
+	color: #cbdbfc;
+}
+
+.outlined {
+	text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+		1px 1px 0 #000;
+}
+
+div#title {
+	font-size: 64px;
+}
+
+div#timer {
+	font-size: 64px;
+}
+
+div#splits {
+	font-size: 32px;
+}
+
+div.cur-split {
+	background: #222034;
+}
+
+p {
+	margin: 0;
+	white-space: nowrap;
+}
