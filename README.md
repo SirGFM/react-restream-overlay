@@ -22,26 +22,46 @@ Some of the intended features are:
 	- Audio controls
 	- Quality controls, maybe?
 
----
+## GFM's stream layout
 
-# NextJS's readme
+Currently, this only has my personal stream layout,
+which was made because my previous one wouldn't work on Linux's OBS (as it doesn't support file dialogs),
+but also as a way to test if this type of application would work for streaming.
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+### Quick guide
 
-## Getting Started
+To start the backend,
+clone [gfm-speedrun-overlay](https://github.com/SirGFM/gfm-speedrun-overlay) and build and execute `gfm-speedrun-overlay/cmd/gfm-overlay`:
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+```sh
+git clone git@github.com:SirGFM/gfm-speedrun-overlay.git
+cd ./cmd/gfm-overlay
+go build
+./gfm-overlay
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then, in this repository, create a `.env` file with the backend's enpoint. Something like:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```sh
+echo "API_URL=http://localhost:8080" > .env
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Finally, simply start the frontend:
+
+```sh
+# XXX: The frontend will be accessible on port 3000.
+npm run dev
+```
+
+### Deploy build
+
+This frontend is meant to be built as static pages,
+and then to be embedded into the backend.
+
+First, build the static pages:
+
+```sh
+npm run build
+```
+
+Then, move the directory `build/` to the backend, renaming it to `res`.
