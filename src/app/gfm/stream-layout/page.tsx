@@ -197,6 +197,7 @@ export default function StreamLayout() {
 				const _runToken = data.get('run-token');
 				const _configRefresh = data.get('config-refresh');
 				const _timerRefresh = data.get('timer-refresh');
+				const _hideTimer = data.get('hide-timer');
 
 				if (_title && _width && _height) {
 					setTitle(_title + '');
@@ -223,6 +224,11 @@ export default function StreamLayout() {
 				} else {
 					setTimerUrl(defaultTimerUrl);
 					setSegments(null);
+				}
+
+				/* Give preference to hiding the timer altogether. */
+				if (_hideTimer) {
+					setTimerUrl('');
 				}
 			});
 		});
@@ -302,12 +308,16 @@ export default function StreamLayout() {
 
 	/* Configure the timer on which the timer/segments is updated. */
 	useEffect(() => {
+		if (!timerUrl) {
+			return;
+		}
+
 		const id = setInterval(onTimer, timerRefreshRate);
 
 		return () => {
 			clearInterval(id);
 		};
-	}, [onTimer, timerRefreshRate]);
+	}, [timerUrl, onTimer, timerRefreshRate]);
 
 	/**
 	 * onResize updates the window's dimension whenever it changes.
@@ -417,13 +427,15 @@ export default function StreamLayout() {
 					/>
 				) : null}
 
-				<LocalTimer
-					widthPx={256}
-					heightPx={72}
-					timeMs={time}
-					showHour={true}
-					showMs={true}
-				/>
+				{timerUrl ? (
+					<LocalTimer
+						widthPx={256}
+						heightPx={72}
+						timeMs={time}
+						showHour={true}
+						showMs={true}
+					/>
+				) : null}
 			</div>
 
 			<div

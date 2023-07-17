@@ -24,6 +24,8 @@ export default function Config() {
 		useState(2500);
 	/** The timer refresh rate loaded from the server, if any. */
 	const [defaultTimerRefreshRate, setDefaultTimerRefreshRate] = useState(117);
+	/** Whether the timer is currently hidden, as loaded from the server. */
+	const [defaultHideTimer, setDefaultHideTimer] = useState(false);
 	/** The run token loaded from the server, if any. */
 	const [runToken, setRunToken] = useState('');
 	/** Value used to forcefully reload the list of categories. */
@@ -114,6 +116,7 @@ export default function Config() {
 				const _runToken = data.get('run-token');
 				const _configRefresh = data.get('config-refresh');
 				const _timerRefresh = data.get('timer-refresh');
+				const _hideTimer = data.get('hide-timer');
 
 				if (_title) {
 					setDefaultTitle(_title + '');
@@ -132,6 +135,9 @@ export default function Config() {
 				}
 				if (_timerRefresh) {
 					setDefaultTimerRefreshRate(parseInt(_timerRefresh + ''));
+				}
+				if (typeof _hideTimer != 'undefined') {
+					setDefaultHideTimer(!!_hideTimer);
 				}
 			});
 		});
@@ -232,6 +238,17 @@ export default function Config() {
 						name="timer-refresh"
 						key="timer-refresh"
 						defaultValue={defaultTimerRefreshRate}
+					/>
+				</div>
+
+				<div>
+					<label htmlFor="hide-timer"> Hide timer: </label>
+					<input
+						type="checkbox"
+						id="hide-timer"
+						name="hide-timer"
+						key="hide-timer"
+						defaultChecked={defaultHideTimer}
 					/>
 				</div>
 
