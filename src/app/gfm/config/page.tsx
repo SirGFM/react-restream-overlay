@@ -6,6 +6,8 @@ import { useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import CategoryManager, { CategoryList } from './CategoryManager';
 import req from '@/utils/req';
+import reqForm from '@/utils/reqForm';
+import { Config, ConfigType } from './Config';
 
 interface StartRun {
 	/** The run's unique token. */
@@ -91,55 +93,28 @@ export default function Config() {
 	useEffect(() => {
 		let abort = false;
 
-		const options = {
-			cache: 'no-store' as const,
-		};
+		reqForm(queryConfigUrl, ConfigType, undefined, (form) => {
+			const config = form as Config;
 
-		fetch(queryConfigUrl, options).then((res) => {
-			if (!res.ok) {
-				console.error(res.statusText);
-				return;
-			} else if (abort) {
-				console.log('aborting...');
+			if (abort) {
 				return;
 			}
 
-			res.formData().then((data) => {
-				if (abort) {
-					console.log('aborting...');
-					return;
-				}
+			setDefaultTitle(config.title);
+			setDefaultWidth(config.width);
+			setDefaultHeight(config.height);
 
-				const _title = data.get('title');
-				const _width = data.get('width');
-				const _height = data.get('height');
-				const _runToken = data.get('run-token');
-				const _configRefresh = data.get('config-refresh');
-				const _timerRefresh = data.get('timer-refresh');
-				const _hideTimer = data.get('hide-timer');
+			if (config['run-token']) {
+				setRunToken(config['run-token']);
+			}
+			if (config['config-refresh']) {
+				setDefaultConfigRefreshRate(config['config-refresh']);
+			}
+			if (config['timer-refresh']) {
+				setDefaultTimerRefreshRate(config['timer-refresh']);
+			}
 
-				if (_title) {
-					setDefaultTitle(_title + '');
-				}
-				if (_width) {
-					setDefaultWidth(parseInt(_width + ''));
-				}
-				if (_height) {
-					setDefaultHeight(parseInt(_height + ''));
-				}
-				if (_runToken) {
-					setRunToken(_runToken + '');
-				}
-				if (_configRefresh) {
-					setDefaultConfigRefreshRate(parseInt(_configRefresh + ''));
-				}
-				if (_timerRefresh) {
-					setDefaultTimerRefreshRate(parseInt(_timerRefresh + ''));
-				}
-				if (typeof _hideTimer != 'undefined') {
-					setDefaultHideTimer(!!_hideTimer);
-				}
-			});
+			setDefaultHideTimer(!!config['hide-timer']);
 		});
 
 		return () => {

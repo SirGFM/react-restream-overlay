@@ -15,6 +15,8 @@ import ScrollingText from '@/components/ScrollingText';
 import Splits, { Segment, SplitsProps } from '@/components/Splits';
 import Timer, { TimerProps } from '@/components/Timer';
 import req from '@/utils/req';
+import reqForm from '@/utils/reqForm';
+import { Config, ConfigType } from '../config/Config';
 
 interface TimeResponse {
 	/** The current time, in milliseconds. */
@@ -180,57 +182,40 @@ export default function StreamLayout() {
 	 * and update the layout accordingly.
 	 */
 	const onUpdate = useCallback(() => {
-		const options = {
-			cache: 'no-store' as const,
-		};
+		reqForm(queryConfigUrl, ConfigType, undefined, (form) => {
+			const config = form as Config;
 
-		fetch(queryConfigUrl, options).then((res) => {
-			if (!res.ok) {
-				console.error(res.statusText);
+			if (!(config.title && config.width && config.height)) {
+				console.error('incomplete data');
 				return;
 			}
+			setTitle(config.title);
+			setWidth(config.width);
+			setHeight(config.height);
 
-			res.formData().then((data) => {
-				const _title = data.get('title');
-				const _width = data.get('width');
-				const _height = data.get('height');
-				const _runToken = data.get('run-token');
-				const _configRefresh = data.get('config-refresh');
-				const _timerRefresh = data.get('timer-refresh');
-				const _hideTimer = data.get('hide-timer');
+			if (config['config-refresh']) {
+				setConfigRefreshRate(config['config-refresh']);
+			}
+			if (config['timer-refresh']) {
+				setTimerRefreshRate(config['timer-refresh']);
+			}
 
-				if (_title && _width && _height) {
-					setTitle(_title + '');
-					setWidth(parseInt(_width + ''));
-					setHeight(parseInt(_height + ''));
-				} else {
-					console.error('incomplete data');
-				}
+			/* Either set or clear the run token. */
+			const _runToken = config['run-token'] ?? '';
+			setRunToken(_runToken);
 
-				if (_configRefresh) {
-					setConfigRefreshRate(parseInt(_configRefresh + ''));
-				}
+			/* Set timer URL based on either the run or on the regular timer. */
+			if (_runToken) {
+				setTimerUrl(`${queryRunUrl}/timer/${_runToken}`);
+			} else {
+				setTimerUrl(defaultTimerUrl);
+				setSegments(null);
+			}
 
-				if (_timerRefresh) {
-					setTimerRefreshRate(parseInt(_timerRefresh + ''));
-				}
-
-				/* Either set or clear the run token. */
-				setRunToken(_runToken ? _runToken + '' : '');
-
-				/* Set timer URL based on either the run or on the regular timer. */
-				if (_runToken) {
-					setTimerUrl(`${queryRunUrl}/timer/${_runToken + ''}`);
-				} else {
-					setTimerUrl(defaultTimerUrl);
-					setSegments(null);
-				}
-
-				/* Give preference to hiding the timer altogether. */
-				if (_hideTimer) {
-					setTimerUrl('');
-				}
-			});
+			/* Give preference to hiding the timer altogether. */
+			if (!!config['hide-timer']) {
+				setTimerUrl('');
+			}
 		});
 	}, [
 		queryConfigUrl,
