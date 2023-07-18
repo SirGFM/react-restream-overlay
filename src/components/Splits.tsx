@@ -36,9 +36,9 @@ interface SegmentProps extends Segment {
 /** A single segment within a run. */
 function SegmentViewer(props: SegmentProps) {
 	/** The width of the name within the segment's container. */
-	const nameWidth = Math.floor(props.widthPx * 0.5);
+	const nameWidth = Math.floor(props.widthPx * 0.45);
 	/** The width of the diff within the segment's container. */
-	const diffWidth = Math.floor(props.widthPx * 0.2);
+	const diffWidth = Math.floor(props.widthPx * 0.25);
 	/** The width of the best/achieved time within the segment's container. */
 	const timeWidth = props.widthPx - diffWidth - nameWidth;
 
