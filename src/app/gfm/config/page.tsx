@@ -59,7 +59,7 @@ export default function Config() {
 		}
 
 		const name = category.current.selectedOptions[0].value;
-		const uriName = encodeRFC3986URIComponent(name)
+		const uriName = encodeRFC3986URIComponent(name);
 
 		/* Start the new run, updating the title accordingly. */
 		req(`${queryRunUrl}/new/${uriName}`, undefined, (data: any) => {
