@@ -12,7 +12,9 @@ export interface Segment {
 	best?: number;
 	/** The (expected/best) starting time, in milliseconds, for this segment. */
 	start?: number;
-	/** The (expected/best) ending time, in milliseconds, for this segment. */
+	/** The ending time, in milliseconds, for this segment.
+	 * If the segment wasn't completed, this should be expected/best ending time.
+	 * If it was completed, this should be actual ending time. */
 	end?: number;
 	/** Whether this segment was skipped. */
 	skipped?: boolean;
@@ -46,10 +48,11 @@ function SegmentViewer(props: SegmentProps) {
 	} else if (
 		props.finished &&
 		props.end &&
+		props.best &&
 		typeof props.start !== 'undefined'
 	) {
 		/* If the segment is complete, show the delta regardless. */
-		deltaTime = props.end - props.start;
+		deltaTime = props.end - (props.best + props.start);
 	} else if (props.end && props.currentTime) {
 		/* Otherwise, calculate the delta for the current segment
 		 * and only display it if it's at least -30s. */
@@ -91,7 +94,7 @@ function SegmentViewer(props: SegmentProps) {
 					hideHourTens={true}
 					hideMin={true}
 					hideMinTens={true}
-					showMs={deltaTime < 60000}
+					showMs={Math.abs(deltaTime) < 60000}
 					showSign={true}
 				/>
 			) : (
