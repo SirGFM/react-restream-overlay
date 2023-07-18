@@ -12,6 +12,7 @@ import {
 	useState,
 } from 'react';
 import req from '@/utils/req';
+import encodeRFC3986URIComponent from '@/utils/encodeUri';
 
 interface SplitList {
 	/** The list of splits retrieved from the server. */
@@ -138,8 +139,9 @@ export default function CategoryManager() {
 		}
 
 		const name = selectedCategory.current.selectedOptions[0].value;
+		const uriName = encodeRFC3986URIComponent(name);
 
-		req(`${querySplitsUrl}/load/${name}`, undefined, (data: any) => {
+		req(`${querySplitsUrl}/load/${uriName}`, undefined, (data: any) => {
 			const res = data as Split;
 
 			setDefaultTitle(res.Name);
@@ -176,9 +178,10 @@ export default function CategoryManager() {
 		}
 
 		const name = selectedCategory.current.selectedOptions[0].value;
+		const uriName = encodeRFC3986URIComponent(name);
 
 		/* On Success, simply remove the category from the list. */
-		req(`${querySplitsUrl}/${name}`, { method: 'DELETE' as const }, () => {
+		req(`${querySplitsUrl}/${uriName}`, { method: 'DELETE' as const }, () => {
 			setUpdateCategories((old) => old + 1);
 		});
 	}, [querySplitsUrl]);

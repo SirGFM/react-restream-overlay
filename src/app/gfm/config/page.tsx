@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import CategoryManager, { CategoryList } from './CategoryManager';
 import req from '@/utils/req';
 import reqForm from '@/utils/reqForm';
+import encodeRFC3986URIComponent from '@/utils/encodeUri';
 import { Config, ConfigType } from './Config';
 
 interface StartRun {
@@ -58,9 +59,10 @@ export default function Config() {
 		}
 
 		const name = category.current.selectedOptions[0].value;
+		const uriName = encodeRFC3986URIComponent(name)
 
 		/* Start the new run, updating the title accordingly. */
-		req(`${queryRunUrl}/new/${name}`, undefined, (data: any) => {
+		req(`${queryRunUrl}/new/${uriName}`, undefined, (data: any) => {
 			const res = data as StartRun;
 
 			setRunToken(res.Token);
