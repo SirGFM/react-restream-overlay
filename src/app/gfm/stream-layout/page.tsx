@@ -260,23 +260,25 @@ export default function StreamLayout() {
 
 				/* Convert each retrieved segment to the expected interface. */
 				let _segments: Segment[] = [];
-				for (let segment of resp.Splits) {
+				/* XXX: tsc isn't able to get the correct type when doing for (let idx in resp.Splits). */
+				for (let idx = 0; idx < resp.Splits.length; idx++) {
+					const segment = resp.Splits[idx];
+					const best = resp.Best.at(idx) ?? resp.Splits[idx];
+
 					let tmp: Segment = {
 						name: segment.Name,
 					};
 
-					if (segment.BestTime && segment.BestTime > 0) {
-						tmp['best'] = segment.BestTime;
+					if (best.BestTime && best.BestTime > 0) {
+						tmp['best'] = best.BestTime;
 					}
 					if (segment.EndTime && segment.EndTime > 0) {
 						tmp['end'] = segment.EndTime;
 					}
+
 					/* Account for the first segment starting at 0.*/
-					if (
-						typeof segment.StartTime !== 'undefined' &&
-						segment.StartTime >= 0
-					) {
-						tmp['start'] = segment.StartTime;
+					if (typeof best.StartTime !== 'undefined' && best.StartTime >= 0) {
+						tmp['start'] = best.StartTime;
 					}
 
 					tmp['skipped'] = segment.Skipped;
