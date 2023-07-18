@@ -118,9 +118,9 @@ export default function Timer(props: TimerProps) {
 	};
 
 	const showHour = hour > 0 || props.showHour;
-	const showHourTens = hour > 10 || !props.hideHourTens;
+	const showHourTens = hour >= 10 || !props.hideHourTens;
 	const showMin = showHour || min > 0 || !props.hideMin;
-	const showMinTens = showHour || min > 10 || !props.hideMinTens;
+	const showMinTens = showHour || min >= 10 || !props.hideMinTens;
 
 	/* Use a hidden div to calculate the actual size of each digit,
 	 * in case the font isn't monospaced. */
