@@ -77,7 +77,7 @@ function SegmentViewer(props: SegmentProps) {
 			}}
 		>
 			<ScrollingText
-				scrollSpeed={100}
+				scrollSpeed={50}
 				widthPx={nameWidth}
 				heightPx={props.heightPx}
 				separator="--"
