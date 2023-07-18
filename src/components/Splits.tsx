@@ -172,6 +172,9 @@ export default function Splits(props: SplitsProps) {
 		currentClass,
 	} = props;
 
+	/** How many segments there are in this component. */
+	const numSegments = segments.length;
+
 	/** List of segments, separated by whether they've been finished or not. */
 	const [finishedSegments, currentSegments, pendingSegments] = useMemo(() => {
 		let finished = [];
@@ -199,9 +202,23 @@ export default function Splits(props: SplitsProps) {
 			return;
 		}
 
-		const idx = Math.min(current, dom.current.childElementCount - 1);
-		dom.current.children[idx].scrollIntoView();
-	}, [current]);
+		let y = 0;
+		if (numSegments * entryHeightPx > heightPx) {
+			/** The number of elements fully visible. */
+			const numVisible = heightPx / entryHeightPx;
+			/** Try to keep the current segment centered. */
+			const start = -Math.floor(numVisible / 2);
+
+			/** Calculate the position of the current segment in the parent. */
+			const idx = Math.min(
+				Math.max(0, current),
+				dom.current.childElementCount - 1
+			);
+			y = (start + idx) * entryHeightPx;
+		}
+
+		dom.current.scrollTo({ top: y, behavior: 'smooth' });
+	}, [numSegments, current, entryHeightPx, heightPx]);
 
 	return (
 		<div
