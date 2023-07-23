@@ -26,7 +26,8 @@ interface TimeResponse {
 interface RunSegment {
 	/** This segment's name. */
 	Name: string;
-	/** The fastest completition time, in milliseconds, for this segment. */
+	/** The fastest completition time, in milliseconds, for this segment,
+	 * among every run in this category. */
 	BestTime: number;
 	/** The starting time, in milliseconds, for this segment. */
 	StartTime: number;
@@ -272,8 +273,11 @@ export default function StreamLayout() {
 					if (best.BestTime && best.BestTime > 0) {
 						tmp['best'] = best.BestTime;
 					}
+					if (best.EndTime && best.EndTime > 0) {
+						tmp['end'] = best.EndTime;
+					}
 					if (segment.EndTime && segment.EndTime > 0) {
-						tmp['end'] = segment.EndTime;
+						tmp['done'] = segment.EndTime;
 					}
 
 					/* Account for the first segment starting at 0.*/

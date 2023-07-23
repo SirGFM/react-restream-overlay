@@ -8,14 +8,16 @@ export interface Segment {
 	/** This segment's name. */
 	name: string;
 	/** The fastest completition time, in milliseconds, for this segment.
-	 * Note that this is just the delta time!!! */
+	 * Note that this is just the delta time!!!
+	 * Also, this isn't necessarily the time for this segment in the best run,
+	 * but the fastest completition time in every run ever! */
 	best?: number;
-	/** The (expected/best) starting time, in milliseconds, for this segment. */
-	start?: number;
-	/** The ending time, in milliseconds, for this segment.
-	 * If the segment wasn't completed, this should be expected/best ending time.
-	 * If it was completed, this should be actual ending time. */
+	/** The ending time, in milliseconds, for this segment in the best run. */
 	end?: number;
+	/** The starting time, in milliseconds, for the segment in the current run. */
+	start?: number;
+	/** The ending time, in milliseconds, for the segment in the current run. */
+	done?: number;
 	/** Whether this segment was skipped. */
 	skipped?: boolean;
 }
@@ -45,14 +47,9 @@ function SegmentViewer(props: SegmentProps) {
 	let deltaTime;
 	if (props.skipped) {
 		/* Remove the delta time if the segment was skipped. */
-	} else if (
-		props.finished &&
-		props.end &&
-		props.best &&
-		typeof props.start !== 'undefined'
-	) {
+	} else if (props.finished && props.end && props.done) {
 		/* If the segment is complete, show the delta regardless. */
-		deltaTime = props.end - (props.best + props.start);
+		deltaTime = props.done - props.end;
 	} else if (props.end && props.currentTime) {
 		/* Otherwise, calculate the delta for the current segment
 		 * and only display it if it's at least -30s. */
@@ -63,7 +60,9 @@ function SegmentViewer(props: SegmentProps) {
 	}
 
 	let endTime;
-	if (props.end) {
+	if (props.done) {
+		endTime = props.done;
+	} else if (props.end) {
 		endTime = props.end;
 	}
 
