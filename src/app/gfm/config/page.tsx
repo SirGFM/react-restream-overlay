@@ -176,6 +176,7 @@ export default function Config() {
 					<label htmlFor="width"> Width: </label>
 					<input
 						type="number"
+						min={1}
 						id="width"
 						name="width"
 						key="width"
@@ -188,6 +189,7 @@ export default function Config() {
 					<label htmlFor="height"> Height: </label>
 					<input
 						type="number"
+						min={1}
 						id="height"
 						name="height"
 						key="height"
@@ -200,6 +202,7 @@ export default function Config() {
 					<label htmlFor="config-refresh"> Config Update (ms): </label>
 					<input
 						type="number"
+						min={1}
 						id="config-refresh"
 						name="config-refresh"
 						key="config-refresh"
@@ -211,6 +214,7 @@ export default function Config() {
 					<label htmlFor="timer-refresh"> Timer Update (ms): </label>
 					<input
 						type="number"
+						min={1}
 						id="timer-refresh"
 						name="timer-refresh"
 						key="timer-refresh"
