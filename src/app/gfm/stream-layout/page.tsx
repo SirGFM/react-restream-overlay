@@ -14,6 +14,7 @@ import { useSearchParams } from 'next/navigation';
 import ScrollingText from '@/components/ScrollingText';
 import Splits, { Segment, SplitsProps } from '@/components/Splits';
 import Timer, { TimerProps } from '@/components/Timer';
+import atoi from '@/utils/atoi';
 import req from '@/utils/req';
 import reqForm from '@/utils/reqForm';
 import { Config, ConfigType } from '../config/Config';
@@ -48,18 +49,6 @@ interface RunSplits {
 	Current: number;
 	/** Whether the run has started. */
 	Started: boolean;
-}
-
-/**
- * atoi converts the value to a number.
- *
- * @param {any} value - The value to be converted.
- * @param {number} fallback - The value used if the conversion fail.
- * @return {number} - The converted number (or fallback, on error).
- */
-function atoi(value: any, fallback: number = 0.25): number {
-	const num = parseFloat(value + '');
-	return num ? num : fallback;
 }
 
 interface BlockProps {
