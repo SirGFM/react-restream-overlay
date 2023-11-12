@@ -1,0 +1,60 @@
+html,
+body {
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+}
+
+div.drum-kit {
+	width: 438px;
+	height: 312px;
+	position: absolute;
+}
+
+div.base-drum {
+	background-image: url('./img/drums/base.png');
+}
+
+div.bass-drum {
+	background-image: url('./img/drums/bass.png');
+}
+
+div.crash1-drum {
+	background-image: url('./img/drums/crash1.png');
+}
+
+div.crash2-drum {
+	background-image: url('./img/drums/crash2.png');
+}
+
+div.hihat-pedal-drum {
+	background-image: url('./img/drums/hihat-pedal.png');
+}
+
+div.hihat-drum {
+	background-image: url('./img/drums/hihat.png');
+}
+
+div.ride-drum {
+	background-image: url('./img/drums/ride.png');
+}
+
+div.snare-drum {
+	background-image: url('./img/drums/snare.png');
+}
+
+div.tom1-drum {
+	background-image: url('./img/drums/tom1.png');
+}
+
+div.tom2-drum {
+	background-image: url('./img/drums/tom2.png');
+}
+
+div.tom3-drum {
+	background-image: url('./img/drums/tom3.png');
+}
+
+div.tom4-drum {
+	background-image: url('./img/drums/tom4.png');
+}
