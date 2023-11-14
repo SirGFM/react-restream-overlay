@@ -5,6 +5,27 @@ body {
 	overflow: hidden;
 }
 
+p.SKILL {
+	transform: scaleX(-1);
+}
+
+p.PAUSE {
+	transform: rotate(90deg);
+}
+
+p.action {
+	position: absolute;
+	width: 64px;
+	height: 64px;
+	line-height: 64px;
+	margin: 0;
+	font-size: 48px;
+	color: white;
+	text-align: center;
+	text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+		1px 1px 0 #000;
+}
+
 div.drum-kit {
 	width: 438px;
 	height: 312px;

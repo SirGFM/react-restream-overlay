@@ -7,6 +7,7 @@ import { useSearchParams } from 'next/navigation';
 import atoi from '@/utils/atoi';
 import req from '@/utils/req';
 import { useDrumConfig } from './DrumConfig';
+import ActionIcon from './ActionIcon';
 import OverlayComponent from './OverlayComponent';
 
 interface Message {
@@ -98,26 +99,48 @@ export default function DrumOverlay() {
 	return (
 		<>
 			<div className="base-drum drum-kit" />
+
 			<OverlayComponent className="bass-drum drum-kit" lastPress={bassDate} />
+			<ActionIcon x={168} y={208} keys={bassKeys} />
+
 			<OverlayComponent
 				className="crash1-drum drum-kit"
 				lastPress={crash1Date}
 			/>
+			<ActionIcon x={112} y={16} keys={crash1Keys} />
+
 			<OverlayComponent
 				className="crash2-drum drum-kit"
 				lastPress={crash2Date}
 			/>
+			<ActionIcon x={358} y={184} keys={crash2Keys} />
+
 			<OverlayComponent
 				className="hihat-pedal-drum drum-kit"
 				lastPress={hihatPedalDate}
 			/>
+			<ActionIcon x={8} y={240} keys={hihatPedalKeys} />
+
 			<OverlayComponent className="hihat-drum drum-kit" lastPress={hihatDate} />
+			<ActionIcon x={40} y={109} keys={hihatKeys} />
+
 			<OverlayComponent className="ride-drum drum-kit" lastPress={rideDate} />
+			<ActionIcon x={304} y={56} keys={rideKeys} />
+
 			<OverlayComponent className="snare-drum drum-kit" lastPress={snareDate} />
+			<ActionIcon x={56} y={192} keys={snareKeys} />
+
 			<OverlayComponent className="tom1-drum drum-kit" lastPress={tom1Date} />
+			<ActionIcon x={128} y={104} keys={tom1Keys} />
+
 			<OverlayComponent className="tom2-drum drum-kit" lastPress={tom2Date} />
+			<ActionIcon x={208} y={104} keys={tom2Keys} />
+
 			<OverlayComponent className="tom3-drum drum-kit" lastPress={tom3Date} />
+			<ActionIcon x={272} y={152} keys={tom3Keys} />
+
 			<OverlayComponent className="tom4-drum drum-kit" lastPress={tom4Date} />
+			<ActionIcon x={280} y={232} keys={tom4Keys} />
 		</>
 	);
 }
