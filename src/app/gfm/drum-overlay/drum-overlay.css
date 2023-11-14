@@ -79,3 +79,56 @@ div.tom3-drum {
 div.tom4-drum {
 	background-image: url('./img/drums/tom4.png');
 }
+
+div.base-key {
+	width: 196px;
+	height: 276px;
+	position: absolute;
+}
+
+div.keys {
+	position: absolute;
+	left: 446px;
+	top: 18px;
+	background-image: url('./img/keys/base.png');
+}
+
+div.attack-key {
+	background-image: url('./img/keys/attack.png');
+}
+
+div.skill-key {
+	background-image: url('./img/keys/skill.png');
+}
+
+div.spell-key {
+	background-image: url('./img/keys/spell.png');
+}
+
+div.jump-key {
+	background-image: url('./img/keys/jump.png');
+}
+
+div.swap-key {
+	background-image: url('./img/keys/swap.png');
+}
+
+div.pause-key {
+	background-image: url('./img/keys/pause.png');
+}
+
+div.up-key {
+	background-image: url('./img/keys/up.png');
+}
+
+div.down-key {
+	background-image: url('./img/keys/down.png');
+}
+
+div.left-key {
+	background-image: url('./img/keys/left.png');
+}
+
+div.right-key {
+	background-image: url('./img/keys/right.png');
+}

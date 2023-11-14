@@ -8,6 +8,7 @@ import atoi from '@/utils/atoi';
 import req from '@/utils/req';
 import { useDrumConfig } from './DrumConfig';
 import ActionIcon from './ActionIcon';
+import { useKeyConfig } from './KeyConfig';
 import OverlayComponent from './OverlayComponent';
 
 interface Message {
@@ -53,6 +54,21 @@ export default function DrumOverlay() {
 		tom4Keys,
 	} = useDrumConfig();
 
+	/** Retrieve the setters/getters for the keys. */
+	const {
+		keysSetter: keyStateSetter,
+		attack,
+		skill,
+		spell,
+		jump,
+		swap,
+		pause,
+		up,
+		down,
+		left,
+		right,
+	} = useKeyConfig();
+
 	/**
 	 * onUpdate fetches the current drum state
 	 * and update the overlay accordingly.
@@ -84,8 +100,20 @@ export default function DrumOverlay() {
 					setter(keys);
 				});
 			}
+
+			/* Update which keys are pressed. */
+			if (msg.keys) {
+				Object.entries(msg.keys).forEach(([key, state]) => {
+					const setter = keyStateSetter[key];
+					if (!setter) {
+						console.error(`missing setter for key ${key}`);
+						return;
+					}
+					setter(state);
+				});
+			}
 		});
-	}, [drumUrl, dateSetter, keysSetter]);
+	}, [drumUrl, dateSetter, keysSetter, keyStateSetter]);
 
 	/* Configure the timer on which the layout is updated. */
 	useEffect(() => {
@@ -141,6 +169,38 @@ export default function DrumOverlay() {
 
 			<OverlayComponent className="tom4-drum drum-kit" lastPress={tom4Date} />
 			<ActionIcon x={280} y={232} keys={tom4Keys} />
+
+			<div className="keys base-key">
+				{attack ? <div className="attack-key base-key" /> : null}
+				<ActionIcon x={0} y={0} keys="ATTACK" />
+
+				{skill ? <div className="skill-key base-key" /> : null}
+				<ActionIcon x={66} y={0} keys="SKILL" />
+
+				{spell ? <div className="spell-key base-key" /> : null}
+				<ActionIcon x={132} y={0} keys="SPELL" />
+
+				{jump ? <div className="jump-key base-key" /> : null}
+				<ActionIcon x={0} y={66} keys="JUMP" />
+
+				{swap ? <div className="swap-key base-key" /> : null}
+				<ActionIcon x={66} y={66} keys="SWAP" />
+
+				{pause ? <div className="pause-key base-key" /> : null}
+				<ActionIcon x={132} y={66} keys="PAUSE" />
+
+				{up ? <div className="up-key base-key" /> : null}
+				<ActionIcon x={66} y={146} keys="UP" />
+
+				{down ? <div className="down-key base-key" /> : null}
+				<ActionIcon x={66} y={212} keys="DOWN" />
+
+				{left ? <div className="left-key base-key" /> : null}
+				<ActionIcon x={0} y={212} keys="LEFT" />
+
+				{right ? <div className="right-key base-key" /> : null}
+				<ActionIcon x={132} y={212} keys="RIGHT" />
+			</div>
 		</>
 	);
 }

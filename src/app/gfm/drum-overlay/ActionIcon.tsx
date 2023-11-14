@@ -34,7 +34,7 @@ interface ActionIconConfig {
 	key2action: { [key in string]: string };
 }
 
-function useActionIconConfig(): ActionIconConfig {
+export function useActionIconConfig(): ActionIconConfig {
 	/** Load the keys -> name mappings from the query string. */
 	const queryString = useSearchParams();
 	const actionKey = queryString.get('action_key') ?? 'Z';
